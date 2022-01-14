@@ -8,12 +8,26 @@ async function solveCaptcha() {
   console.log(input);
   let base64code = await getCaptchaBase64(input);
   console.log(base64code);
-  let code = await getCode(base64code);
+  let codeJson = await getCode(base64code);
   // await fillCapthaInput(code);
-  if (!code.ParsedResults[0].ParsedText) return false;
-  console.log(code.ParsedResults[0].ParsedText);
-  await fillCapthaInput(input, code.ParsedResults[0].ParsedText);
+  let codeIsValid = /^\d{4}$/.test(codeJson.ParsedResults[0].ParsedText.match(/\d+/g))
+  if (!codeIsValid) {
+    //regex only 4 number
+    //code.ParsedResults[0].ParsedText most be only number
+    console.log('try again')
+    // console.log(codeJson)
+    reNewCaptcha()
+    solveCaptcha()
+    return false
+  };
+
+  // console.log(codeJson);
+  await fillCapthaInput(input, codeJson.ParsedResults[0].ParsedText);
   return true;
+}
+
+function reNewCaptcha() {
+  document.querySelector(".captcha-img").click()
 }
 
 async function fillCapthaInput(input, captchaCode) {
@@ -86,7 +100,7 @@ setInterval(function () {
     console.log("url changed");
     if (isCaptchaFrame()) {
       // clearInterval(captchaInterval);
-      solveCaptcha();
+      // solveCaptcha();
 
         document.querySelector('.captcha-img').addEventListener('click', () => {
           solveCaptcha();
