@@ -10,9 +10,9 @@
     "matches": [ "http://*/*", "https://*/*" ],
     "run_at": "document_end"
  } ],
-  "permissions": ["activeTab", "scripting", "debugger","\u003Call_urls>"],
+  "permissions": ["activeTab", "scripting", "debugger","<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
-  "update_url": "https://bahman-customer-api.iranecar.com/*"
+  "update_url": "https://bahman.iranecar.com/*"
 }
